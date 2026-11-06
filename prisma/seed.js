@@ -2,10 +2,26 @@ import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 import { PrismaClient } from "../generated/prisma/index.js";
 
 const adapter = new PrismaMariaDb(process.env.DATABASE_URL);
-const prisma = new PrismaClient(adapter);
+const prisma = new PrismaClient({ adapter });
 
 async function main() {
   console.log("Seeding started");
+
+  await prisma.category.deleteMany();
+
+  const categoriesName = [
+    "Giallo",
+    "Fantascienza",
+    "Romanzo",
+    "Game",
+    "Storico",
+  ];
+  const categories = await prisma.category.createMany({
+    data: categoriesName.map((categ) => ({
+      name: categ,
+    })),
+  });
+  console.log(categories);
 }
 
 main()
