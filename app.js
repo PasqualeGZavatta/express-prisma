@@ -1,5 +1,7 @@
 import express from "express";
 import booksRouter from "./routes/books.js";
+import error500 from "./middleware/error500.js";
+import error404 from "./middleware/Error404.js";
 
 //setup
 const app = express();
@@ -13,7 +15,8 @@ app.get("/", (req, res) => {
 //Crud for books
 
 app.use("/books", booksRouter);
-
+app.use(error500);
+app.use(error404);
 //server start
 
 app.listen(port, () => {
