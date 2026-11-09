@@ -1,7 +1,7 @@
 import express from "express";
 import booksRouter from "./routes/books.js";
 import error500 from "./middleware/error500.js";
-import error404 from "./middleware/Error404.js";
+import error404 from "./middleware/error404.js";
 
 //setup
 const app = express();
