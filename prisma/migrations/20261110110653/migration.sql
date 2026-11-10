@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `book` MODIFY `prize` DOUBLE NULL DEFAULT 0;

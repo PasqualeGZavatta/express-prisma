@@ -1,15 +1,11 @@
+import prisma from "../lib/prisma.js";
 async function main() {
   console.log("Seeding started");
 
+  // await prisma.book.deleteMany();
   await prisma.category.deleteMany();
 
-  const categoriesName = [
-    "Giallo",
-    "Fantascienza",
-    "Romanzo",
-    "Game",
-    "Storico",
-  ];
+  const categoriesName = ["Giallo", "Fantasy", "Romanzo", "Game", "Storico"];
   const categories = await prisma.category.createMany({
     data: categoriesName.map((categ) => ({
       name: categ,
