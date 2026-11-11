@@ -43,6 +43,26 @@ booksRouter.post("/", async (req, res) => {
   res.status(201).json(newBook);
 });
 
+//update
+booksRouter.patch("/:id", async (req, res) => {
+  const id = Number(req.params.id);
+  const { title, description, author, prize, categoryId } = req.body;
+
+  const updatedBook = await prisma.book.update({
+    where: {
+      id: id,
+    },
+    data: {
+      title,
+      description,
+      author,
+      prize,
+      categoryId,
+    },
+  });
+  res.json(updatedBook);
+});
+
 // booksRouter.get("/", async (req, res, next) => {
 //   try {
 //     // 1. Aspettiamo che Prisma prenda i dati dal database
