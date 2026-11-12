@@ -100,6 +100,37 @@ booksRouter.patch("/:id", async (req, res) => {
 });
 
 //delete
+booksRouter.delete("/:id", async (req, res) => {
+  const id = Number(req.params.id);
+
+  //VALIDAZIONI
+  //ID è numero intero?
+  if (!Number.isInteger(id)) {
+    return res.status(400).json({
+      error: "Invalid ID format",
+    });
+  }
+
+  //category esiste? Il book a quell'id??
+  const book = await prisma.book.findUnique({
+    where: {
+      id: id,
+    },
+  });
+
+  if (!book) {
+    return res.status(404).json({
+      error: "Book not found",
+    });
+  }
+
+  //delete prompt
+  const deleteBook = await prisma.book.delete({
+    where: { id },
+  });
+
+  res.status(204).send();
+});
 
 // booksRouter.get("/", async (req, res, next) => {
 //   try {
