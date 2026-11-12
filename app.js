@@ -7,7 +7,6 @@ import error404 from "./middleware/error404.js";
 const app = express();
 const port = 3000;
 
-
 app.use(express.json());
 
 //routing
@@ -18,10 +17,8 @@ app.get("/", (req, res) => {
 //Crud for books
 app.use("/books", booksRouter);
 
-
-app.use(error404);
-
 app.use(error500);
+app.use(error404);
 
 //server start
 app.listen(port, () => {

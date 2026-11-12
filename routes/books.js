@@ -1,5 +1,6 @@
 import express from "express";
 import prisma from "../lib/prisma.js";
+import error404 from "../middleware/error404.js";
 
 const booksRouter = express.Router();
 
@@ -48,6 +49,41 @@ booksRouter.patch("/:id", async (req, res) => {
   const id = Number(req.params.id);
   const { title, description, author, prize, categoryId } = req.body;
 
+  //validazioni
+
+  //validazione ID
+
+  if (!Number.isInteger(id)) {
+    return res.status(400).json({
+      error: "Invalid id format",
+    });
+  }
+
+  //validazione esistenza prodotto nel DB ed esistenza categoria
+
+  const book = await prisma.book.findUnique({
+    where: {
+      id,
+    },
+  });
+  if (!book) {
+    return res.status(404).json({
+      error: "Book non trovato",
+    });
+  }
+
+  if (categoryId !== undefined) {
+    const category = await prisma.category.findUnique({
+      where: {
+        id: Number(categoryId),
+      },
+    });
+    if (!category) {
+      return res.status(400).json({
+        error: "invalid category id",
+      });
+    }
+  }
   const updatedBook = await prisma.book.update({
     where: {
       id: id,
@@ -56,12 +92,14 @@ booksRouter.patch("/:id", async (req, res) => {
       title,
       description,
       author,
-      prize,
-      categoryId,
+      prize: prize !== undefined ? Number(prize) : undefined,
+      categoryId: categoryId !== undefined ? Number(categoryId) : undefined,
     },
   });
   res.json(updatedBook);
 });
+
+//delete
 
 // booksRouter.get("/", async (req, res, next) => {
 //   try {
